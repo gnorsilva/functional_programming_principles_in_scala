@@ -1,0 +1,6 @@
+tmp/
+target
+*.jar
+.classpath
+.project
+.settings/
