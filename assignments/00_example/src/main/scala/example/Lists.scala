@@ -1,7 +1,5 @@
 package example
 
-import common._
-
 object Lists {
   /**
    * This method computes the sum of all elements in the list xs. There are
@@ -24,7 +22,11 @@ object Lists {
    * @return The sum of all elements in `xs`
    */
   def sum(xs: List[Int]): Int = {
-    0
+    sum(0, xs)
+  }
+
+  def sum(total : Int, values : List[Int] ): Int = {
+    if (values.isEmpty) total else sum(total + values.head, values.tail)
   }
 
   /**
