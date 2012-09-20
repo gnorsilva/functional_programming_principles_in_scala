@@ -1,0 +1,84 @@
+the style of functional programming means: avoid mutations, get new ways to abstract and compose functions 
+
+
+*** formal model of evaluation - substition model? - all evaluation does is reduce an expression to a value - lambda calculus
+
+can only be applied to immutable actions
+
+
+call-by-value: evaluates the functions first - evaluates every function argument only once
+
+call-by-name: defers evaluation to the last moment - argument is not evaluated if its not used
+
+Call-by-name vs Call-by-value
+
+def test(x: Int, y: Int) = x * x
+
+test (2,3)
+
+CBV
+2 * 3
+6
+
+CBN
+2 * 3
+6
+
+
+test (3+4, 8)
+
+CBV
+test (7, 8)
+7 * 8
+56
+
+CBN
+3+4 * 8
+7 * 8
+56
+
+
+test (7, 2*4)
+
+CBV 
+test (7, 8)
+7 * 8
+56
+
+CBN
+7 * ( 2 * 4 )
+7 * 8
+56 
+
+
+test(3 + 4, 2 * 4)
+
+CBV
+test(7, 8)
+7 * 8
+56
+
+CBN
+(3 + 4) * (2 * 4)
+7 * (2 * 4)
+7 *  8
+56
+
+
+BUT not every expression reduces to a value (in a finite number of steps):
+
+def loop: Int = loop              <--- will never reduce - it resolves to itself... 
+
+
+if CBV terminates, CBN terminates, but the opposite is not true
+
+def first(x: Int , y: Int) = x
+
+first(1, loop)
+
+under CBN, loop is not evaluated, 1 is returned
+
+under CBV they are both evaluated, so it gets stuck on loop
+
+
+
