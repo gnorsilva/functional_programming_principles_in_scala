@@ -82,3 +82,7 @@ under CBV they are both evaluated, so it gets stuck on loop
 
 
 
+Value Definitions
+
+the 'def' form is "by-name" - only evaluated on execution
+the 'val' form is "by-value" - evaluated on assignement
