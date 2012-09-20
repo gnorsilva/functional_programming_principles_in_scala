@@ -24,7 +24,7 @@ class ShortCirtuitedAndOrExercise extends FunSuite {
   }
 
   def and(x: Boolean, y: => Boolean): Boolean = {
-    if (!x) false else if(!y) false else true
+    if (x) y else false
   }
 
 
@@ -45,7 +45,7 @@ class ShortCirtuitedAndOrExercise extends FunSuite {
   }
 
   def or(x: Boolean, y: => Boolean): Boolean = {
-    if (x) true else if (y) true else false
+    if (x) true else y
   }
 
 }
