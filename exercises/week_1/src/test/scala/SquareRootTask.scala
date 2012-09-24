@@ -66,18 +66,16 @@ class SquareRootTask extends FunSuite {
   }
 
   def squareRoot(number : Double) : Double = {
-    squareRoot(number, 4)
-  }
+    val decimalPlaces = 4
+    val initialEstimation = 1
 
-  def squareRoot(number : Double, decimalPlaces : Int) : Double = {
-    squareRootApproximation(number, decimalPlaces, 1)
+    def squareRootApproximation(guess: Double) : Double = {
+      val nextGuess = toDecimalPlaces( mean ( number / guess, guess ), decimalPlaces)
+      if (guess == nextGuess) guess else squareRootApproximation(nextGuess)
+    }
+  
+    squareRootApproximation(initialEstimation)
   }
-
-  def squareRootApproximation(number : Double, decimalPlaces: Int, guess: Double) : Double = {
-    val nextGuess = toDecimalPlaces( mean ( number / guess, guess ), decimalPlaces)
-    if (guess == nextGuess) guess else squareRootApproximation(number, decimalPlaces, nextGuess)
-  }
-
 
   //Attempt at SquareRoot following the video's interface
 
