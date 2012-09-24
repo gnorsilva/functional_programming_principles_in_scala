@@ -14,7 +14,16 @@ object Main {
   /**
    * Exercise 1
    */
-  def pascal(c: Int, r: Int): Int = ???
+  def pascal(c: Int, r: Int): Int = {
+    def aboveLeft: Int = pascal(c - 1 , r - 1)
+
+    def aboveRight: Int = pascal(c, r - 1)
+
+    def isTriangleEdge: Boolean = c == 0 || c == r
+
+    if (isTriangleEdge) 1 else ( aboveLeft + aboveRight)
+  }
+
 
   /**
    * Exercise 2
