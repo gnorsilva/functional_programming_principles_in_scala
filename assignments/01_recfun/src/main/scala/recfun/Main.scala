@@ -1,4 +1,5 @@
 package recfun
+
 import common._
 
 object Main {
@@ -15,20 +16,33 @@ object Main {
    * Exercise 1
    */
   def pascal(c: Int, r: Int): Int = {
-    def aboveLeft: Int = pascal(c - 1 , r - 1)
+    def aboveLeft: Int = pascal(c - 1, r - 1)
 
     def aboveRight: Int = pascal(c, r - 1)
 
     def isTriangleEdge: Boolean = c == 0 || c == r
 
-    if (isTriangleEdge) 1 else ( aboveLeft + aboveRight)
+    if (isTriangleEdge) 1 else (aboveLeft + aboveRight)
   }
 
 
   /**
    * Exercise 2
    */
-  def balance(chars: List[Char]): Boolean = ???
+  def balance(chars: List[Char]): Boolean = {
+
+    def balanceFinder(chars: List[Char], balance: Int): Boolean = {
+      if (balance < 0) false
+      else if (chars.isEmpty) balance == 0
+      else balanceFinder(chars.tail, balance + delta(chars.head))
+    }
+
+    def delta(char: Char): Int = {
+      if (char == '(') 1 else if (char == ')') -1 else 0
+    }
+
+    balanceFinder(chars, 0)
+  }
 
   /**
    * Exercise 3
