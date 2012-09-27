@@ -1,0 +1,23 @@
+"Tail recursion" is a function that calls itself as its last action
+
+they are iterative 
+
+in general if the last action of a function is a calling to another function (which may be itself) one stack frame would be sufficient for both functions. this is called "tail-calls"
+
+the examples from the videos:
+
+def gcd(a: Int, b: Int): Int = if (b==0) a else gcd(b, a % b)
+
+gcd is tail recursive - rewriting sequence of constant size
+
+
+def factorial(n: Int): Int = if (n == 0) 1 else n * factorial(n - 1)
+
+is NOT tail recursive - the last call is not to itself, and as such all the elements need to be kept to deliver the final result
+
+*** this is helpful in avoiding stack overflow exceptions. But remember, clarity trumps efficience. like donald knuth said, "premature optimization is the source of all evil"
+
+in scala the "@tailrec" annotation can be used, and if not tail recursive an error will be thrown 
+
+It pretty much behaves like a loop in an imperative program
+
