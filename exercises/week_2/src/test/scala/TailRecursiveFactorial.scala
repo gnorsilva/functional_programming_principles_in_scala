@@ -7,7 +7,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 
 
 @RunWith(classOf[JUnitRunner])
-class TailRecursiveFactorial extends FunSuite with TableDrivenPropertyChecks with ShouldMatchers {
+class TailRecursiveFactorial extends FunSuite with ShouldMatchers {
 
   test("factorial of 1 is 1") {
     assert(factorial(1) === 1)

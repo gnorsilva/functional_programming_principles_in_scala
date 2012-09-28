@@ -7,7 +7,9 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 
 
 @RunWith(classOf[JUnitRunner])
-class TailRecursiveSumOfFactorials extends FunSuite with TableDrivenPropertyChecks with ShouldMatchers {
+class TailRecursiveSumOfFactorials extends FunSuite with ShouldMatchers {
+
+  def cube (x: Int): Int = x * x * x
 
   val factorial: (Int) => Int = new TailRecursiveFactorial().factorial _
 

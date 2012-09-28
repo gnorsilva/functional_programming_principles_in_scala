@@ -31,8 +31,37 @@ in functional languages, functions are first class values
 
 "anonymous functions" - function literals, i.e. declared on the "fly"
 
+parameter   body
 (x: Int) => x * x * x
 
-paramater      body
+
+"functions returning another function"
+
+def sum (f: Int => Int): (Int,Int) => Int = {
+	
+	def sumF(a:Int, b:Int): Int = {
+		//implementation
+	}
+
+	sumF
+} 
+
+
+def sumCubes = sum(x => x * x * x)
+
+sumCubes(1, 10)
+
+
+BUT this can be simplified by avoiding the middleman
+
+def cube (x: Int):Int = x * x * x
+
+sum cube (1,10) == (sum(cube)) (1,10)
+
+syntatic sugar to re-write a function returning a function:
+
+def sum (f: Int => Int)(a:Int, b:Int): Int = {
+	//implementation
+} 
 
 

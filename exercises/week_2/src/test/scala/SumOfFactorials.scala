@@ -7,7 +7,7 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 
 
 @RunWith(classOf[JUnitRunner])
-class SumOfFactorials extends FunSuite with TableDrivenPropertyChecks with ShouldMatchers {
+class SumOfFactorials extends FunSuite with ShouldMatchers {
 
   val factorial: (Int) => Int = new TailRecursiveFactorial().factorial _
 
