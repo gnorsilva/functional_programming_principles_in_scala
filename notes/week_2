@@ -21,3 +21,18 @@ in scala the "@tailrec" annotation can be used, and if not tail recursive an err
 
 It pretty much behaves like a loop in an imperative program
 
+
+"Higher-order Functions" - functions that take other functions as parameters or return functions as results, i.e. they act on other functions 
+
+the opposite is "first order functions" they act on data values
+
+in functional languages, functions are first class values
+
+
+"anonymous functions" - function literals, i.e. declared on the "fly"
+
+(x: Int) => x * x * x
+
+paramater      body
+
+

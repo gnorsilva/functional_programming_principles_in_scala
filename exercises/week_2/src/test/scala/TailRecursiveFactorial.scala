@@ -51,5 +51,4 @@ class TailRecursiveFactorial extends FunSuite with TableDrivenPropertyChecks wit
     factorial(n, 1)
   }
 
-
 }
