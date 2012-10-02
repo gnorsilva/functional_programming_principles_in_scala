@@ -65,3 +65,5 @@ def sum (f: Int => Int)(a:Int, b:Int): Int = {
 } 
 
 
+
+"Fixed points" - x is a fixed point of a function f if f(x) = x
