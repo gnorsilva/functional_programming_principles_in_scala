@@ -77,6 +77,12 @@ class FunSetSuite extends FunSuite {
     val s1 = singletonSet(1)
     val s2 = singletonSet(2)
     val s3 = singletonSet(3)
+
+    val s1and2 = union(s1,s2)
+    val s2and3 = union(s2,s3)
+    val s3and1 = union(s3,s1)
+
+    val s1and2and3 = union(s1and2,s3)
   }
 
   /**
@@ -86,7 +92,7 @@ class FunSetSuite extends FunSuite {
    * Once you finish your implementation of "singletonSet", exchange the
    * function "ignore" by "test".
    */
-  ignore("singletonSet(1) contains 1") {
+  test("singletonSet(1) contains 1") {
     
     /**
      * We create a new instance of the "TestSets" trait, this gives us access
@@ -101,12 +107,68 @@ class FunSetSuite extends FunSuite {
     }
   }
 
-  ignore("union contains all elements") {
+  test("union contains all elements") {
     new TestSets {
       val s = union(s1, s2)
       assert(contains(s, 1), "Union 1")
       assert(contains(s, 2), "Union 2")
       assert(!contains(s, 3), "Union 3")
+    }
+  }
+
+
+  test("intersect contains elements that are in both sets") {
+    new TestSets {
+      val s = intersect(s1, s1and2)
+      assert(contains(s, 1))
+      assert(!contains(s, 2))
+      assert(!contains(s, 3))
+    }
+
+    new TestSets {
+      val s = intersect(s2and3, s1and2)
+      assert(!contains(s, 1))
+      assert(contains(s, 2))
+      assert(!contains(s, 3))
+    }
+  }
+
+  test("diff contains elements that are in only on of the sets") {
+    new TestSets {
+      val s = diff(s2and3, s1and2)
+      assert(!contains(s, 1))
+      assert(!contains(s, 2))
+      assert(contains(s, 3))
+    }
+
+    new TestSets {
+      val s = diff(s1and2, s1and2)
+      assert(!contains(s, 1))
+      assert(!contains(s, 2))
+      assert(!contains(s, 3))
+    }
+
+    new TestSets {
+      val s = diff(s3and1, s2and3)
+      assert(contains(s, 1))
+      assert(!contains(s, 2))
+      assert(!contains(s, 3))
+    }
+  }
+
+  test("filter should return a set whose values match the predicate") {
+    new TestSets {
+      val s = filter(s1and2and3, x => x > 2)
+      assert(!contains(s, 1))
+      assert(!contains(s, 2))
+      assert(contains(s, 3))
+    }
+
+    new TestSets {
+      val s = filter(s1and2and3, x => x == 2)
+      assert(!contains(s, 1))
+      assert(contains(s, 2))
+      assert(!contains(s, 3))
     }
   }
 }
