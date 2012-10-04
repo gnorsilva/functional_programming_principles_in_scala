@@ -1,6 +1,5 @@
 package funsets
 
-import common._
 
 /**
  * 2. Purely Functional Sets.
@@ -48,9 +47,7 @@ object FunSets {
    */
   def filter(s: Set, p: Int => Boolean): Set = x => s(x) && p(x)
 
-//  EXERCISE 2
-
-
+  //  EXERCISE 2
 
 
   /**
@@ -63,23 +60,39 @@ object FunSets {
    */
   def forall(s: Set, p: Int => Boolean): Boolean = {
     def iter(a: Int): Boolean = {
-      if (???) ???
-      else if (???) ???
-      else iter(???)
+      if (a == bound) true
+      else if (contains(s, a)) p(a) && iter(a + 1)
+      else iter(a + 1)
     }
-    iter(???)
+
+    isNotEmpty(s, -bound) && iter(-bound)
+  }
+
+
+  def isNotEmpty(s: Set, a: Int): Boolean = {
+    if (a == bound) contains(s, a)
+    else contains(s, a) || isNotEmpty(s, a + 1)
   }
 
   /**
    * Returns whether there exists a bounded integer within `s`
    * that satisfies `p`.
    */
-  def exists(s: Set, p: Int => Boolean): Boolean = ???
+  def exists(s: Set, p: Int => Boolean): Boolean = forall(filter(s, p), p) //forall(s, x => forall(singletonSet(x),p))
+
+  def emptySet: Set = intersect(singletonSet(0), singletonSet(1))
 
   /**
    * Returns a set transformed by applying `f` to each element of `s`.
    */
-  def map(s: Set, f: Int => Int): Set = ???
+  def map(s: Set, f: Int => Int): Set = {
+    def blah(result: Set, x: Int): Set = {
+      if (x > bound) result
+      else if (contains(s, x)) blah(union(result, singletonSet(f(x))), x+1)
+      else blah(result, x + 1)
+    }
+    blah(emptySet, -bound)
+  }
 
   /**
    * Displays the contents of a set

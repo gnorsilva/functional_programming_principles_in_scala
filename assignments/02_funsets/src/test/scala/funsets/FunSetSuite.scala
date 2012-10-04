@@ -83,6 +83,8 @@ class FunSetSuite extends FunSuite {
     val s3and1 = union(s3,s1)
 
     val s1and2and3 = union(s1and2,s3)
+
+    val emptySet = intersect(s1, s2)
   }
 
   /**
@@ -171,4 +173,56 @@ class FunSetSuite extends FunSuite {
       assert(!contains(s, 3))
     }
   }
+
+
+  //EXERCISE 2
+
+  test("all elements in the set (1,2,3) are higher than 0"){
+    new TestSets {
+      assert(forall(s1and2and3, x => x > 0))
+    }
+  }
+
+  test("not all element in the set (1,2,3) are higher than 4"){
+    new TestSets {
+      assert(!forall(s1and2and3, x => x > 4))
+    }
+  }
+
+  test("not all elements in the set (1,2,3) are divisible by 2"){
+    new TestSets {
+      assert(!forall(s1and2and3, x => x % 2 == 0))
+    }
+  }
+
+  test("an empty set does not have an element higher than the minimum bound"){
+    new TestSets {
+      assert(!forall(emptySet, x => x > -bound))
+    }
+  }
+
+  test("at least one element in the set (1,2,3) is divisible by 2"){
+    new TestSets {
+      assert(exists(s1and2and3, x => x % 2 == 0))
+    }
+  }
+
+  test("no element in the set (1,2,3) is higher than 4"){
+    new TestSets {
+      assert(!exists(s1and2and3, x => x > 4))
+    }
+  }
+
+  test("mapping a set (1,5,8) can be doubled to (2,10,16)"){
+    val one = singletonSet(1)
+    val five = singletonSet(5)
+    val eight = singletonSet(8)
+    val set = union(union(one,five),eight)
+    val result: FunSets.Set = map(set, x => x * 2)
+    assert(contains(result,2))
+    assert(contains(result,10))
+    assert(contains(result,16))
+  }
+
+
 }
