@@ -22,15 +22,15 @@ class RationalNumbers extends FunSuite with ShouldMatchers {
 
     def denominator: Int = y / commonDenominator
 
-    def add(value: Rational): Rational = {
+    def + (value: Rational): Rational = {
       val resultNumerator = numerator * value.denominator + value.numerator * denominator
       val resultDenominator = denominator * value.denominator
       new Rational(resultNumerator, resultDenominator)
     }
 
-    def negative: Rational = new Rational(-x,y)
+    def unary_- : Rational = new Rational(-x,y)
 
-    def subtract(value: Rational): Rational = add(value.negative)
+    def - (value: Rational): Rational = this + -value
 
     override def equals (value: Any): Boolean = {
       val casted = value.asInstanceOf[Rational]
@@ -67,19 +67,19 @@ class RationalNumbers extends FunSuite with ShouldMatchers {
   }
 
   test("two rationals can be added"){
-    half.add(oneQuarter) should equal(threeQuarters)
+    half + oneQuarter should equal(threeQuarters)
   }
 
   test("a rational number can return a negative copy of its value") {
-    half.negative should equal(new Rational(-1,2))
+    -half should equal(new Rational(-1,2))
   }
   
   test("a rational number can subtract another rational") {
-    one.subtract(oneThird) should equal(twoThirds)
+    one - oneThird should equal(twoThirds)
   }
   
   test("a rational number can subtract another rational which can then subtract another rational") {
-    oneThird.subtract(fiveSevenths).subtract(oneAndHalf) should equal(new Rational(-79,42))
+    oneThird - fiveSevenths - oneAndHalf should equal(new Rational(-79,42))
   }
 
   test("a rational cannot have 0 as a denominator"){
@@ -87,5 +87,5 @@ class RationalNumbers extends FunSuite with ShouldMatchers {
       new Rational(1,0)
     }
   }
-
+  
 }
