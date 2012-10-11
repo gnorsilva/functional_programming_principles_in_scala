@@ -10,8 +10,17 @@ import org.scalatest.prop.TableDrivenPropertyChecks
 class RationalNumbers extends FunSuite with ShouldMatchers {
 
   class Rational(x: Int, y: Int){
-    def numerator: Int = x
-    def denominator: Int = y
+  
+    require(y != 0, "denominator must not be zero")
+
+    private def greatestCommonDenominator(a: Int, b: Int): Int = 
+      if (b==0) a else greatestCommonDenominator(b, a % b)
+
+    private val commonDenominator = greatestCommonDenominator(x,y)
+
+    def numerator: Int = x / commonDenominator
+
+    def denominator: Int = y / commonDenominator
 
     def add(value: Rational): Rational = {
       val resultNumerator = numerator * value.denominator + value.numerator * denominator
@@ -25,14 +34,8 @@ class RationalNumbers extends FunSuite with ShouldMatchers {
 
     override def equals (value: Any): Boolean = {
       val casted = value.asInstanceOf[Rational]
-      valuesAreEqual(casted) || actualValue == casted.actualValue
+      numerator == casted.numerator && denominator == casted.denominator
     }
-
-    def valuesAreEqual(that: Rational): Boolean = {
-      numerator == that.numerator && denominator == that.denominator
-    }
-
-    def actualValue = numerator / denominator
 
     override def toString: String = numerator + "/" + denominator
   }
@@ -77,6 +80,12 @@ class RationalNumbers extends FunSuite with ShouldMatchers {
   
   test("a rational number can subtract another rational which can then subtract another rational") {
     oneThird.subtract(fiveSevenths).subtract(oneAndHalf) should equal(new Rational(-79,42))
+  }
+
+  test("a rational cannot have 0 as a denominator"){
+    intercept[IllegalArgumentException]{
+      new Rational(1,0)
+    }
   }
 
 }
