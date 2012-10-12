@@ -64,6 +64,23 @@ class TweetSetSuite extends FunSuite {
       val trends = set5.ascendingByRetweet
       assert(!trends.isEmpty)
       assert(trends.head.user === "c")
+      assert(trends.tail.head.user === "d")
     }
+  }
+
+  test("total google tweets"){
+    var counter = 0
+    GoogleVsApple.googleTweets.foreach(t => counter = counter + 1)
+    assert(counter === 38)
+  }
+
+  test("total apple tweets"){
+    var counter = 0
+    GoogleVsApple.appleTweets.foreach(t => counter = counter + 1)
+    assert(counter === 150)
+  }
+
+  test("ordered retweets"){
+    println(GoogleVsApple.trending)
   }
 }
