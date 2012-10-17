@@ -1,0 +1,13 @@
+difference between having
+
+1. class foo(val x: Int)
+
+and 
+
+2. class foo(_x: Int) = def x = ...
+
+In the 1st case the "val x" is only evaluated when the object is instantiated, where as in the 2nd case (with a def) the values are evaluated everytime the method is referenced
+
+in scala val definitions are really special cases of methods
+
+ 
