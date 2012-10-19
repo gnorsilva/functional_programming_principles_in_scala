@@ -100,4 +100,37 @@ class ConsLists extends FunSuite with ShouldMatchers {
     }
   }
 
+  test("an empty list"){
+    List().isEmpty should be(true)
+  }
+
+  test("a list with one element"){
+    List(1).head should be(1)
+  }
+  test("a list with two element"){
+    List(1,2).tail.head should be(2)
+  }
+  object List{
+    def apply[T]() = new Nil[T]
+    def apply[T](x: T) = new Cons(x, new Nil[T])
+    def apply[T](x: T, y: T) = new Cons(x, new Cons(y, new Nil[T]))
+  }
+
+  class A
+
+  class B extends A
+
+  class C extends B
+
+  def subsOfA[T <: A] = true
+  def subsOfB[T <: B] = true
+  def superOfC[T >: C] = true
+  def subsOfBSuperOfC[T >: C <: A] = true
+
+  test (" blah blah "){
+    subsOfA[A]
+  }
+
+
+
 }

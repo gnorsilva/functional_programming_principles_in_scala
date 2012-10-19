@@ -11,3 +11,38 @@ In the 1st case the "val x" is only evaluated when the object is instantiated, w
 in scala val definitions are really special cases of methods
 
  
+
+type bounds:
+
+[T <: P]     T subtype of P
+
+[T >: C]     T supertype of C    
+
+[T >: C <: P] S is super of C AND sub of P
+
+Covariance: 
+
+NonEmpty <: Intset
+
+covariance means that 
+
+List[NonEmpty] <: List[IntSet]
+
+
+But, covariance can lead to problems, like in this java example:
+
+NonEmpty[] a = new NonEmpty[2]{}
+IntSet[] sets = a
+sets[0] = Empty
+NonEmpty non = a[0] 		// This shouldn't happen!
+
+
+Liskov's substitution principle tells us when a type can be a suptype of another.
+
+"If A <: B then everything one can do with a value of type B, one should also be able to do with a value of type A"
+
+The actual definition is a bit more formal:
+
+"Let q(x) be a property provable about objects x of type B
+Then q(y) should be provable for objects of type A where A <: B"
+
