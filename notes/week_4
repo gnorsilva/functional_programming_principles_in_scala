@@ -46,3 +46,36 @@ The actual definition is a bit more formal:
 "Let q(x) be a property provable about objects x of type B
 Then q(y) should be provable for objects of type A where A <: B"
 
+
+for C[T], given types A and B such that A <: B:
+
+covariant:	 	C[A] <: C[B]
+contravariant: 	C[A] >: C[B]
+nonvariant:		neither C[A] nor c[B] are subptypes of each other
+
+
+class definitons of variance in scala:
+covariant:	 	class C[+A] {...}
+contravariant: 	class C[-A] {...}
+nonvariant:		class C[A] {...}
+
+
+Functions are 'contravariant' in their argument type(s) and 'covariant' in their result type. eg:
+
+If A2 <: A1 and B1 <: B2, then
+
+	A1 => B1 <: A2 => B2
+
+Rougly in scala:
+	- 'covariant' only in method results
+	- 'contravariant' only in method parameters
+	- 'nonvariant' anywhere else
+
+
+
+val xs: List[NonEmpty] = ...
+val x: Empty = ....
+xs prepend x  		<-- what is the type returned? a List[IntSet]
+
+Scala will, through type inference, try to return the supertype that satisfies both
+

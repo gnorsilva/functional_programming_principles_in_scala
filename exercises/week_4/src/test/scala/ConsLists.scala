@@ -8,38 +8,38 @@ import org.scalatest.matchers.ShouldMatchers
 @RunWith(classOf[JUnitRunner])
 class ConsLists extends FunSuite with ShouldMatchers {
 
-  trait List[T] {
+  trait List[+T] {
     def head: T
     def tail: List[T]
     def isEmpty: Boolean
-    def add(element: T): List[T]
+    def add[U >: T](element: U): List[U]
   }
 
   class Cons[T](val head: T, val tail: List[T]) extends List[T]{
     def isEmpty: Boolean = false
 
-    def add(element: T) = {
-      if (tail.isEmpty) new Cons[T](head, new Cons[T](element, new Nil))
-      else new Cons[T](head,tail.add(element))
+    def add[U >: T](element: U) = {
+      if (tail.isEmpty) new Cons[U](head, new Cons[U](element, Nil))
+      else new Cons[U](head,tail.add(element))
     }
   }
 
-  class Nil[T] extends List[T]{
+  object Nil extends List[Nothing]{
     //'Nothing' is a sub type of any other type
     def head: Nothing = throw new NoSuchElementException
     def tail: Nothing = throw new NoSuchElementException
     def isEmpty: Boolean = true
-    def add(element: T) = new Cons[T](element, new Nil)
+    def add[T >: Nothing](element: T) = new Cons[T](element, Nil)
   }
 
   test("a list with a head should not be empty") {
-    val list: List[Int] = new Cons[Int](1, new Nil[Int])
+    val list: List[Int] = new Cons[Int](1, Nil)
 
     list.isEmpty should be(false)
   }
 
   test("a list can add an element"){
-    val values = new Cons[Int](1, new Nil[Int]).add(2)
+    val values = new Cons[Int](1, Nil).add(2)
 
     values.head should be(1)
     values.tail.head should be(2)
@@ -47,7 +47,7 @@ class ConsLists extends FunSuite with ShouldMatchers {
   }
 
   test("a list can add 3 elements in order"){
-    val values = new Cons[Int](1, new Nil[Int]).add(2).add(3)
+    val values = new Cons[Int](1, Nil).add(2).add(3)
 
     values.head should be(1)
     values.tail.head should be(2)
@@ -56,11 +56,11 @@ class ConsLists extends FunSuite with ShouldMatchers {
   }
 
   test("a Nil list should be empty") {
-    new Nil[Int].isEmpty should be(true)
+    Nil.isEmpty should be(true)
   }
 
   test("a Nil can add an element") {
-    val list = new Nil[Int].add(1)
+    val list = Nil.add(1)
 
     list.head should be(1)
     list.tail.isEmpty should be(true)
@@ -68,9 +68,9 @@ class ConsLists extends FunSuite with ShouldMatchers {
 
 
 
-  def list[T](element: T) = new Cons[T](element, new Nil)
+  def list[T](element: T) = new Cons[T](element, Nil)
 
-  def emptyList[T] = new Nil[T]
+  def emptyList[T] = Nil
 
   // I think this is another functional pattern - iterating by reducing the index until reaching 0
   def nth[T](index: Int, list: List[T]): T =
@@ -111,9 +111,9 @@ class ConsLists extends FunSuite with ShouldMatchers {
     List(1,2).tail.head should be(2)
   }
   object List{
-    def apply[T]() = new Nil[T]
-    def apply[T](x: T) = new Cons(x, new Nil[T])
-    def apply[T](x: T, y: T) = new Cons(x, new Cons(y, new Nil[T]))
+    def apply[T]() = Nil
+    def apply[T](x: T) = new Cons(x, Nil)
+    def apply[T](x: T, y: T) = new Cons(x, new Cons(y, Nil))
   }
 
   class A
