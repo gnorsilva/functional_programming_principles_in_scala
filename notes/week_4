@@ -79,3 +79,19 @@ xs prepend x  		<-- what is the type returned? a List[IntSet]
 
 Scala will, through type inference, try to return the supertype that satisfies both
 
+
+***** These are discouraged in Scala
+
+x.asIstanceOf[T]
+x.asIstanceOf[T]
+
+**************************************
+
+
+
+Decomposition
+
+Obs: the sole purpose of test and accessor functions is to 'reverse' the construction process
+	- which subclass was used?
+	- what were the arguments of the constructor?
+
