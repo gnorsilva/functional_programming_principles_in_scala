@@ -1,6 +1,7 @@
 package patmat
 
 import common._
+import scala._
 
 /**
  * Assignment 4: Huffman coding
@@ -96,7 +97,7 @@ object Huffman {
    * of a leaf is the frequency of the character.
    */
   def makeOrderedLeafList(freqs: List[(Char, Int)]): List[Leaf] = {
-    freqs.sorted.map(pair => pair match {case (c,w) => Leaf(c, w)})
+    freqs.sortWith((a,b) => a._2 < b._2).map(pair => pair match {case (c,w) => Leaf(c, w)})
   }
 
   def orderCodeTrees(trees: List[CodeTree]): List[CodeTree] = {
@@ -122,7 +123,7 @@ object Huffman {
    */
 
   def combine(trees: List[CodeTree]): List[CodeTree] = {
-    if (singleton(trees)) trees
+    if (singleton(trees) || trees.isEmpty) trees
     else {
       val first = trees.head
       val second = trees.tail.head
@@ -180,7 +181,20 @@ object Huffman {
    * This function decodes the bit sequence `bits` using the code tree `tree` and returns
    * the resulting list of characters.
    */
-  def decode(tree: CodeTree, bits: List[Bit]): List[Char] = ???
+  def decode(tree: CodeTree, bits: List[Bit]): List[Char] = {
+
+    def decode(node: CodeTree, bits: List[Bit]): List[Char] = {
+      node match {
+        case Fork(l,r,c,w) => bits.head match {
+          case 0 => decode(l, bits.tail)
+          case 1 => decode(r, bits.tail)
+        }
+        case Leaf(c,w) => if (bits.size < 1) List(c) else List(c) ::: decode(tree, bits)
+      }
+    }
+
+    decode(tree, bits)
+  }
 
   /**
    * A Huffman coding tree for the French language.
@@ -200,7 +214,7 @@ object Huffman {
   /**
    * Write a function that returns the decoded secret
    */
-  def decodedSecret: List[Char] = ???
+  def decodedSecret: List[Char] = decode(frenchCode, secret)
 
 
 
@@ -210,7 +224,25 @@ object Huffman {
    * This function encodes `text` using the code tree `tree`
    * into a sequence of bits.
    */
-  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
+  def encode(tree: CodeTree)(text: List[Char]): List[Bit] = {
+
+    def containsChar(node: CodeTree, char: Char): Boolean = node match {
+      case Fork(l,r,chars,w) => chars.contains(char)
+      case Leaf(c,w) => c == char
+    }
+
+    def navigate(node: CodeTree, text: List[Char]): List[Bit] = node match {
+      case Fork(l,r,c,w) => {
+        val leftNodeContainsChar = containsChar(l, text.head)
+        val nextBit = if (leftNodeContainsChar) 0 else 1
+        val nextNode = if (leftNodeContainsChar) l else r
+        nextBit :: navigate(nextNode, text)
+      }
+      case Leaf(c,w) => if (text.size == 1) List() else navigate(tree, text.tail)
+    }
+
+    navigate(tree, text)
+  }
 
 
   // Part 4b: Encoding using code table
@@ -221,7 +253,18 @@ object Huffman {
    * This function returns the bit sequence that represents the character `char` in
    * the code table `table`.
    */
-  def codeBits(table: CodeTable)(char: Char): List[Bit] = ???
+  def codeBits(table: CodeTable)(char: Char): List[Bit] = {
+    def applyToValuesFrom[T](row: (Char, List[Bit]))(action: (Char, List[Bit]) => T): T = row match {
+      case (rowChar, rowBits) => action(rowChar, rowBits)
+    }
+
+    def unwantedChars: ((Char, List[Huffman.Bit])) => Boolean = {
+      row => applyToValuesFrom(row)((c,b) => c == char)
+    }
+
+    val filteredTable = table.filter(unwantedChars)
+    if (filteredTable.isEmpty) List() else applyToValuesFrom(filteredTable.head)((c,b) => b)
+  }
 
   /**
    * Given a code tree, create a code table which contains, for every character in the
@@ -231,14 +274,44 @@ object Huffman {
    * a valid code tree that can be represented as a code table. Using the code tables of the
    * sub-trees, think of how to build the code table for the entire tree.
    */
-  def convert(tree: CodeTree): CodeTable = ???
+  def convert(tree: CodeTree): CodeTable = {
+    def createTableFromNode(node: CodeTree, bit: Bit): CodeTable = node match {
+      case Fork(l,r,c,w) => c.map(char => (char, List(bit)))
+      case Leaf(c,w) => List((c, List(bit)))
+    }
+
+    tree match{
+      case Fork(l,r,c,w) => {
+        val leftTable: CodeTable = createTableFromNode(l,0)
+        val rightTable: CodeTable = createTableFromNode(r,1)
+        val root = mergeCodeTables(leftTable, rightTable)
+        val branches = mergeCodeTables(convert(l), convert(r))
+        mergeCodeTables(root, branches)
+      }
+      case Leaf(c,w) => List()
+    }
+  }
 
   /**
    * This function takes two code tables and merges them into one. Depending on how you
    * use it in the `convert` method above, this merge method might also do some transformations
    * on the two parameter code tables.
    */
-  def mergeCodeTables(a: CodeTable, b: CodeTable): CodeTable = ???
+  def mergeCodeTables(a: CodeTable, b: CodeTable): CodeTable = {
+    if (a.isEmpty) b
+    else if (b.isEmpty) a
+    else {
+      val rowB = b.head
+      val filtered = a.filter(rowA => rowA._1 == rowB._1)
+      if (filtered.isEmpty) mergeCodeTables(a ::: List(rowB), b.tail)
+      else {
+        val rowA = filtered.head
+        val newRow = (rowA._1, rowA._2 ::: rowB._2)
+        val withoutRowA = a.filterNot(row => row == rowA)
+        mergeCodeTables(withoutRowA ::: List(newRow), b.tail)
+      }
+    }
+  }
 
   /**
    * This function encodes `text` according to the code tree `tree`.
@@ -246,5 +319,8 @@ object Huffman {
    * To speed up the encoding process, it first converts the code tree to a code table
    * and then uses it to perform the actual encoding.
    */
-  def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] = ???
+  def quickEncode(tree: CodeTree)(text: List[Char]): List[Bit] = {
+    if (text.isEmpty) List()
+    else codeBits(convert(tree))(text.head) ::: quickEncode(tree)(text.tail)
+  }
 }
