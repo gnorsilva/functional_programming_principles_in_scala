@@ -36,6 +36,7 @@ object Huffman {
     case Leaf(c, w) => List(c)
   }
 
+
   def makeCodeTree(left: CodeTree, right: CodeTree) =
     Fork(left, right, chars(left) ::: chars(right), weight(left) + weight(right))
 
@@ -77,6 +78,7 @@ object Huffman {
    *       println("integer is  : "+ theInt)
    *   }
    */
+
   def times(chars: List[Char]): List[(Char, Int)] = {
     if (chars.isEmpty) List()
     else{
@@ -101,8 +103,6 @@ object Huffman {
     trees.sortWith((a, b) => weight(a) < weight(b))
   }
 
-
-
   /**
    * Checks whether the list `trees` contains only one single code tree.
    */
@@ -120,6 +120,7 @@ object Huffman {
    * If `trees` is a list of less than two elements, that list should be returned
    * unchanged.
    */
+
   def combine(trees: List[CodeTree]): List[CodeTree] = {
     if (singleton(trees)) trees
     else {
@@ -129,6 +130,7 @@ object Huffman {
       orderCodeTrees(List(makeCodeTree(first, second)) ::: remainingLeafs)
     }
   }
+
 
   /**
    * This function will be called in the following way:
@@ -147,6 +149,7 @@ object Huffman {
    *    the example invocation. Also define the return type of the `until` function.
    *  - try to find sensible parameter names for `xxx`, `yyy` and `zzz`.
    */
+
   def until(satisfied: List[CodeTree] => Boolean,
             action: List[CodeTree] => List[CodeTree])
            (values: List[CodeTree]): List[CodeTree] = {
@@ -154,15 +157,18 @@ object Huffman {
     if (satisfied(values)) values else until(satisfied, action)(action(values))
   }
 
+
   /**
    * This function creates a code tree which is optimal to encode the text `chars`.
    *
    * The parameter `chars` is an arbitrary text. This function extracts the character
    * frequencies from that text and creates a code tree based on them.
    */
+
   def createCodeTree(chars: List[Char]): CodeTree = {
     until(singleton, combine) (makeOrderedLeafList(times(chars))).head
   }
+
 
 
 
@@ -185,7 +191,9 @@ object Huffman {
 
   /**
    * What does the secret message say? Can you decode it?
+
    * For the decoding use the 'frenchCode' Huffman tree defined above.
+
    */
   val secret: List[Bit] = List(0,0,1,1,1,0,1,0,1,1,1,0,0,1,1,0,1,0,0,1,1,0,1,0,1,1,0,0,1,1,1,1,1,0,1,0,1,1,0,0,0,0,1,0,1,1,1,0,0,1,0,0,1,0,0,0,1,0,0,0,1,0,1)
 

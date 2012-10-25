@@ -95,3 +95,12 @@ Obs: the sole purpose of test and accessor functions is to 'reverse' the constru
 	- which subclass was used?
 	- what were the arguments of the constructor?
 
+This leads to Pattern Matching, done in scala with 'match' and case classes
+
+
+Patterns can be constructed from:
+	- constructors
+	- variables - always begin with lowercase letter, cannot be re-used in a pattern
+	- wildcard patterns
+	- constants - always begin with upper case letter, except 'null','true','false'
+

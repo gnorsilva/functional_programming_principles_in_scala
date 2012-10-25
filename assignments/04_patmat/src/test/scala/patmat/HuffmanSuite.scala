@@ -30,7 +30,6 @@ class HuffmanSuite extends FunSuite {
       assert(chars(t2) === List('a','b','d'))
     }
   }
-
   test("chars of a leaf"){
     val c = 'b'
     assert(chars(Leaf(c, 2)) === List(c))
@@ -99,7 +98,6 @@ class HuffmanSuite extends FunSuite {
   test("creating a full hoffman tree from a list of characaters"){
     assert(createCodeTree("hello".toList) === Fork(Leaf('l',2),Fork(Leaf('o',1),Fork(Leaf('e',1),Leaf('h',1),List('e', 'h'),2),List('o', 'e', 'h'),3),List('l', 'o', 'e', 'h'),5))
   }
-
 
   ignore("decode and encode a very short text should be identity") {
     new TestTrees {
