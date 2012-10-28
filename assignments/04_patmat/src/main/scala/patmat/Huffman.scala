@@ -247,7 +247,10 @@ object Huffman {
 
   // Part 4b: Encoding using code table
 
-  type CodeTable = List[(Char, List[Bit])]
+  type CodeRow = (Char, List[Bit])
+  type CodeTable = List[CodeRow]
+
+  object EmptyRow extends CodeRow('|', List())
 
   /**
    * This function returns the bit sequence that represents the character `char` in
@@ -298,19 +301,23 @@ object Huffman {
    * on the two parameter code tables.
    */
   def mergeCodeTables(a: CodeTable, b: CodeTable): CodeTable = {
-    if (a.isEmpty) b
-    else if (b.isEmpty) a
-    else {
-      val rowB = b.head
-      val filtered = a.filter(rowA => rowA._1 == rowB._1)
-      if (filtered.isEmpty) mergeCodeTables(a ::: List(rowB), b.tail)
-      else {
-        val rowA = filtered.head
-        val newRow = (rowA._1, rowA._2 ::: rowB._2)
-        val withoutRowA = a.filterNot(row => row == rowA)
-        mergeCodeTables(withoutRowA ::: List(newRow), b.tail)
-      }
+
+    def getMatchingRowInTable(row: CodeRow, table: CodeTable): CodeRow = {
+      val filtered: CodeTable = table.filter(matchingRow => matchingRow._1 == row._1)
+      if (filtered.isEmpty) EmptyRow else filtered.head
     }
+
+    def removeRowFromTable(table: CodeTable, row: CodeRow): CodeTable = table.filterNot(r => r == row)
+
+    def mergeRows(rowA: CodeRow, rowB: CodeRow): CodeRow = (rowA._1, rowA._2 ::: rowB._2)
+
+    def mergeRowIntoTable(row: CodeRow, table: CodeTable): CodeTable = {
+      val matchingRow: CodeRow = getMatchingRowInTable(row, table)
+      if (matchingRow == EmptyRow) table ::: List(row)
+      else removeRowFromTable(table, matchingRow) ::: List(mergeRows(matchingRow, row))
+    }
+
+    if (a.isEmpty) b else if (b.isEmpty) a else mergeCodeTables(mergeRowIntoTable(b.head, a), b.tail)
   }
 
   /**
