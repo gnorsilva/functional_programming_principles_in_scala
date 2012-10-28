@@ -1,0 +1,13 @@
+Right Associativity:
+
+Normally method calls are actioned from left to right
+
+foo.doSomething()
+
+But in scala operators ending in ':' are seen as method calls of the right-hand operand
+
+val nums = 1 :: 2 :: Nil
+
+is actually
+
+val nums = Nil.::(2).::(1)
