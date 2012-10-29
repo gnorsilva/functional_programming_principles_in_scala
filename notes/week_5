@@ -23,3 +23,54 @@ val pair = ("something", 10)
 val(label, value) = pair 
 println(label) // > "something"
 println(value) // > 10
+
+
+Implicit parameters:
+
+def msort[T](xs: List[T])(implicit ord: Ordering) =
+	
+	def merge(xs: List[T], ys: List[T]) =
+		
+		... if (ord.lt(x, y)) ...
+	
+		... merge(msort(fst), msort(snd)) ...
+
+
+the 'ord' parameter can be left out in further function calls - the implicit one will be used by the compiler. there are a few rules to determine which implicit one:
+
+Say, a function takes an implicit parameter of type T. The compiler will search an implicit definition that:
+
+- is marked implicit
+- has a type compatible with T
+- is visible at the point of the function call, or is defined in a companion object associated with T.
+
+If there is a single (most specific) definition, it will be taken as
+actual argument for the implicit parameter.
+
+Otherwise it’s an error.
+
+
+ReduceLeft:
+
+- inserts a given binary operator between adjacent elements of a list
+
+List(x1, ..., xn) reduceLeft op = (... (x1 op x2) op ... ) op xn
+
+
+*** the function ((x, y) => x * y) can be re-written as ( _ * _ ) 
+
+reductions take either the first element (reduceRight) or the last element (reduceLeft) and operate on it with the given function and the next element, and follows to operate the next element with the previous result, until the end of the list.
+
+folding takes a zero element and operates on it with the first (foldLeft) or the last (foldRight), and like reducing, carries that result and operates on the following elements until the end of the list.
+
+
+for associative or commutitative operators foldLeft & foldRight are equivalent. but sometimes only one of the two operations is appropriate, eg concatenating: 
+
+def concat[T](xs: List[T], ys: List[T]): List[T] = (xs foldRight ys) (_::_) 
+works as it should
+
+def concat[T](xs: List[T], ys: List[T]): List[T] = (ys foldLeft  xs) (_:::_)
+complains that :: is not a member of type T
+
+
+
