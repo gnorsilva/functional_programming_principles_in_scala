@@ -11,3 +11,15 @@ val nums = 1 :: 2 :: Nil
 is actually
 
 val nums = Nil.::(2).::(1)
+
+
+Tuples:
+
+Tuples can have 'n' elements, for eg a pair is a tuple with 2 elements
+
+tuples can be assigned with pattern matching. for a pair you can do:
+
+val pair = ("something", 10)
+val(label, value) = pair 
+println(label) // > "something"
+println(value) // > 10
