@@ -12,16 +12,13 @@ x +: xs		- first element 'x' followed by elements 'xs'
 xs :+ x 	- elements 'xs' followed by 'x' as the last element
 
 
-
-
-
 								Iterable
 						
 							/		|		\
 							
 						Sequence	Set	     Map
 						
-					  /   |     \
+					  /    |     \
 					
 			    List    Vector   Range
 
@@ -37,3 +34,35 @@ Ranges:
 6 to 1 by -2 // 6,4,2
 
 ranges are represented with lower bound, upper bound and step value
+
+
+For expressions:
+
+for ( s ) yield e
+
+s is a sequence of generators and filters, e an expression whose value is returned by the iteration
+
+- generators: pattern <- collection
+- filter: if f
+- s must start with a generator
+- there can be more than 1 generator in the list, the last vary faster
+- curly braces can be used instead of brackets 
+
+for {
+	i <- 1 until n
+	j <- 1 until i
+	if isPrime(i + j)
+} yield (i,j)
+
+another example
+( for ( (x,y) <- xs zip ys ) yield x * y ).sum
+
+
+Sets vs sequences:
+
+- sets are unordered
+- no duplicate elements
+- fundamental operation on set is 'contains'
+
+
+

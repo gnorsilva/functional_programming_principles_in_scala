@@ -7,7 +7,7 @@ import org.scalatest.matchers.ShouldMatchers
 
 
 @RunWith(classOf[JUnitRunner])
-class Listsss extends FunSuite with ShouldMatchers {
+class Listlsss extends FunSuite with ShouldMatchers {
 
   def ??? = throw new Error("NOT IMPLEMENTED")
 
