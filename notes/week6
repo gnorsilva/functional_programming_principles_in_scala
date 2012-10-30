@@ -1,0 +1,39 @@
+Vectors: better for random element access and bulk operations - map, filter...
+
+Lists are better when performing recursive work where 'head' and 'tail' are needed
+
+vectors are created as:
+
+val values = Vector(1,2,3,4)
+
+instead of x :: xs there is
+
+x +: xs		- first element 'x' followed by elements 'xs'
+xs :+ x 	- elements 'xs' followed by 'x' as the last element
+
+
+
+
+
+								Iterable
+						
+							/		|		\
+							
+						Sequence	Set	     Map
+						
+					  /   |     \
+					
+			    List    Vector   Range
+
+
+Arrays and Strings are not subclass of Sequence (since they come from Java) but in Scala have most of Sequence funcionalities - map, filter...
+
+
+Ranges:
+
+1 until 5 // 1,2,3,4
+1 to 5 // 1,2,3,4,5
+1 to 10 by 3 // 1,4,7,10
+6 to 1 by -2 // 6,4,2
+
+ranges are represented with lower bound, upper bound and step value
