@@ -66,3 +66,47 @@ Sets vs sequences:
 
 
 
+the 'distinct' function removes duplicate elements in a result set
+
+
+syntax of for is closely related to the higher-order functions 'map', 'flatMap' and 'filter'
+
+def map[T, U](xs: List[T], f: T => U): List[U] = 
+	for (x <- xs) yield f(x)
+
+
+def flatMap[T, U](xs: List[T], f: T => Iterable[U]): List[U] = 
+	for (x <- xs; y <- f(x)) yield y
+
+
+def filter[T](xs: List[T], p: T => Boolean): List[T] =
+	for (x <- xs if p(x)) yield x
+
+
+BUT the scala compiler translates 'for' expressions in terms of map, flatMap and filter
+
+	for (x <- e1) yield e2
+
+is actually translated to
+
+	e1.map(x => e2)
+
+
+Generalisation of for: since its replaced with the 3 higher functions, it can be used for custom types as long as they implement these 3 functions. this helps with databases, xml...
+
+
+
+
+Maps:
+
+key / value pairs are written in the form:    key -> value
+
+
+
+constructors can take an unspecifed sequence of arguments, with a * at the end of the args. eg:
+
+class Poly (values: Map[Int, Double]) {
+	
+	def this(bindings: (Int, Double)*) = this(bindings.toMap)
+
+}

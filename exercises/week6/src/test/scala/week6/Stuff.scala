@@ -74,9 +74,10 @@ class Stuff extends FunSuite with ShouldMatchers {
     placeQueens(n)
   }
 
-  test(" placing queens "){
+  test("placing queens"){
     assert(queens(4) contains(List(2,0,3,1)))
     println(queens(4))
   }
+
 
 }
