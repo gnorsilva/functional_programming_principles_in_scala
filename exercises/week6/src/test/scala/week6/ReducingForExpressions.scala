@@ -23,7 +23,7 @@ class ReducingForExpressions extends FunSuite with ShouldMatchers {
 
   test(" reducing for expressions"){
 
-    val titles = books.flatMap(b => b.authors withFilter(a => a startsWith "Bird") map(x => x))
+    val titles = books.flatMap(b => b.authors withFilter(a => a startsWith "Bird,") map(x => b.title))
     //for(b <- books; a <- b.authors if a startsWith "Bird") yield b.title
 
     assert(titles === List("Introduction to Functional Programming"))
