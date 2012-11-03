@@ -1,6 +1,7 @@
 package forcomp
 
 import common._
+import collection.immutable.IndexedSeq
 
 object Anagrams {
 
@@ -69,6 +70,8 @@ object Anagrams {
     case Some(x) => x
   }
 
+
+
   /** Returns the list of all subsets of the occurrence list.
    *  This includes the occurrence itself, i.e. `List(('k', 1), ('o', 1))`
    *  is a subset of `List(('k', 1), ('o', 1))`.
@@ -91,7 +94,19 @@ object Anagrams {
    *  Note that the order of the occurrence list subsets does not matter -- the subsets
    *  in the example above could have been displayed in some other order.
    */
-  def combinations(occurrences: Occurrences): List[Occurrences] = ???
+  def combinations(occurrences: Occurrences): List[Occurrences] = occurrences match {
+    case Nil => List(Nil)
+    case (charAtHead, numberOfOccurrences) :: tail => {
+      val headCombinations = ( for ( number <- 1 to numberOfOccurrences) yield List((charAtHead, number)) ).toList
+      val nextCombinations = combinations(tail)
+      headCombinations ::: combine(headCombinations, nextCombinations) ::: nextCombinations
+    }
+  }
+
+  def combine(A: List[Occurrences], B: List[Occurrences]): List[Occurrences] = B match {
+    case Nil => A
+    case _ => for ( as <- A ; bs <- B) yield (as ::: bs)
+  }
 
   /** Subtracts occurrence list `y` from occurrence list `x`.
    * 

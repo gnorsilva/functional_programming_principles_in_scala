@@ -6,6 +6,8 @@ import org.junit.runner.RunWith
 import org.scalatest.junit.JUnitRunner
 
 import Anagrams._
+import scala._
+import scala.Some
 
 @RunWith(classOf[JUnitRunner])
 class AnagramsSuite extends FunSuite {
@@ -42,22 +44,41 @@ class AnagramsSuite extends FunSuite {
     assert(wordAnagrams("player").toSet === Set("parley", "pearly", "player", "replay"))
   }
 
-
-
-  ignore("subtract: lard - r") {
-    val lard = List(('a', 1), ('d', 1), ('l', 1), ('r', 1))
-    val r = List(('r', 1))
-    val lad = List(('a', 1), ('d', 1), ('l', 1))
-    assert(subtract(lard, r) === lad)
-  }
-
-
-
-  ignore("combinations: []") {
+  test("combinations: []") {
     assert(combinations(Nil) === List(Nil))
   }
 
-  ignore("combinations: abba") {
+  test("combining a list of occurrences with an empty list"){
+    val aCombinations = List(
+      List(('a', 1)),
+      List(('a', 2))
+    )
+
+    assert(combine(aCombinations, List()) == aCombinations)
+  }
+
+  test("combining two lists of occurrences - As and Bs"){
+    val aCombinations = List(
+      List(('a', 1)),
+      List(('a', 2))
+    )
+
+    val bCombinations = List(
+      List(('b', 1)),
+      List(('b', 2))
+    )
+
+    val expectedResult = List (
+      List(('a', 1), ('b', 1)),
+      List(('a', 2), ('b', 1)),
+      List(('a', 1), ('b', 2)),
+      List(('a', 2), ('b', 2))
+    )
+
+    assert(combine(aCombinations, bCombinations).toSet == expectedResult.toSet)
+  }
+
+  test("combinations: abba") {
     val abba = List(('a', 2), ('b', 2))
     val abbacomb = List(
       List(),
@@ -71,6 +92,54 @@ class AnagramsSuite extends FunSuite {
       List(('a', 2), ('b', 2))
     )
     assert(combinations(abba).toSet === abbacomb.toSet)
+  }
+
+  test("combinations: abccba") {
+    val abccba = List(('a', 2), ('b', 2), ('c', 2))
+
+    val abccbacomb = List(
+      List(),
+      List(('a', 1)),
+      List(('a', 2)),
+      List(('b', 1)),
+      List(('b', 2)),
+      List(('c', 1)),
+      List(('c', 2)),
+
+      List(('a', 1), ('b', 1)),
+      List(('a', 2), ('b', 1)),
+      List(('a', 1), ('b', 2)),
+      List(('a', 2), ('b', 2)),
+
+      List(('a', 1), ('c', 1)),
+      List(('a', 2), ('c', 1)),
+      List(('a', 1), ('c', 2)),
+      List(('a', 2), ('c', 2)),
+
+      List(('b', 1), ('c', 1)),
+      List(('b', 2), ('c', 1)),
+      List(('b', 1), ('c', 2)),
+      List(('b', 2), ('c', 2)),
+
+      List(('a', 1), ('b', 1),('c',1)),
+      List(('a', 2), ('b', 1),('c',1)),
+      List(('a', 1), ('b', 2),('c',1)),
+      List(('a', 2), ('b', 2),('c',1)),
+      List(('a', 1), ('b', 1),('c',2)),
+      List(('a', 2), ('b', 1),('c',2)),
+      List(('a', 1), ('b', 2),('c',2)),
+      List(('a', 2), ('b', 2),('c',2))
+    )
+
+    assert(combinations(abccba).toSet === abccbacomb.toSet)
+  }
+
+
+  ignore("subtract: lard - r") {
+    val lard = List(('a', 1), ('d', 1), ('l', 1), ('r', 1))
+    val r = List(('r', 1))
+    val lad = List(('a', 1), ('d', 1), ('l', 1))
+    assert(subtract(lard, r) === lad)
   }
 
 
