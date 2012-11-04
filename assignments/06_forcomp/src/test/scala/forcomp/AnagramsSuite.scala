@@ -135,7 +135,7 @@ class AnagramsSuite extends FunSuite {
   }
 
 
-  ignore("subtract: lard - r") {
+  test("subtract: lard - r") {
     val lard = List(('a', 1), ('d', 1), ('l', 1), ('r', 1))
     val r = List(('r', 1))
     val lad = List(('a', 1), ('d', 1), ('l', 1))
@@ -144,36 +144,85 @@ class AnagramsSuite extends FunSuite {
 
 
 
-  ignore("sentence anagrams: []") {
+  test("sentence anagrams: []") {
     val sentence = List()
     assert(sentenceAnagrams(sentence) === List(Nil))
   }
 
-  ignore("sentence anagrams: Linux rulez") {
+  test("sentence to string") {
+    assert(sentenceToString(List("hello","world")) == "helloworld")
+  }
+
+  test("sentence anagrams: sane") {
+    val sentence = List("sane")
+
+    val expectedAnagrams = List(
+      List("en", "as"),
+      List("as", "en"),
+      List("sane"),
+      List("Sean")
+    )
+
+    assert(sentenceAnagrams(sentence).toSet === expectedAnagrams.toSet)
+  }
+  
+  
+  test("sentence anagrams: Linux rulez") {
     val sentence = List("Linux", "rulez")
     val anas = List(
       List("Rex", "Lin", "Zulu"),
-      List("nil", "Zulu", "Rex"),
       List("Rex", "nil", "Zulu"),
-      List("Zulu", "Rex", "Lin"),
-      List("null", "Uzi", "Rex"),
       List("Rex", "Zulu", "Lin"),
-      List("Uzi", "null", "Rex"),
       List("Rex", "null", "Uzi"),
-      List("null", "Rex", "Uzi"),
-      List("Lin", "Rex", "Zulu"),
-      List("nil", "Rex", "Zulu"),
       List("Rex", "Uzi", "null"),
       List("Rex", "Zulu", "nil"),
+
+      List("nil", "Zulu", "Rex"),
+      List("nil", "Rex", "Zulu"),
+
+      List("null", "Uzi", "Rex"),
+      List("null", "Rex", "Uzi"),
+
+      List("Uzi", "null", "Rex"),
+      List("Uzi", "Rex", "null"),
+
+      List("Lin", "Rex", "Zulu"),
+      List("Lin", "Zulu", "Rex"),
+
+      List("rulez", "Linux"),
+
+      List("Zulu", "Rex", "Lin"),
       List("Zulu", "Rex", "nil"),
       List("Zulu", "Lin", "Rex"),
-      List("Lin", "Zulu", "Rex"),
-      List("Uzi", "Rex", "null"),
       List("Zulu", "nil", "Rex"),
-      List("rulez", "Linux"),
+
       List("Linux", "rulez")
     )
     assert(sentenceAnagrams(sentence).toSet === anas.toSet)
-  }  
+  }
+
+
+  test("sentence anagrams: Yes man") {
+    val sentence = List("Yes", "man")
+
+    val expectedAnagrams = List(
+      List("en", "as", "my"),
+      List("en", "my", "as"),
+      List("man", "yes"),
+      List("men", "say"),
+      List("as", "en", "my"),
+      List("as", "my", "en"),
+      List("sane", "my"),
+      List("Sean", "my"),
+      List("my", "en", "as"),
+      List("my", "as", "en"),
+      List("my", "sane"),
+      List("my", "Sean"),
+      List("say", "men"),
+      List("yes", "man")
+    )
+
+    assert(sentenceAnagrams(sentence).toSet === expectedAnagrams.toSet)
+  }
 
 }
