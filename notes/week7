@@ -1,0 +1,19 @@
+streams:
+
+similar to lists but their tails is evaluated only on demand - this is useful to avoid unnecessary computations where reaching the tail is not needed.
+
+the tail is evaluated only on demand. for eg:
+
+(1 to 1000).toStream => Stream(1, ?)        where the '?' means the tail hasn't been evaluated
+
+
+The 'Stream' constructor operator is    #::
+
+x #:: xs == Stream.cons(x, xs)
+
+This can be used in experssions & patterns
+
+
+The main difference betweeen List and Stream is that the tail parameter is declared with a 'call by name' parameter: '=>'
+
+Both have analogous methods and implementations - filter, map, reduce... - but again 
