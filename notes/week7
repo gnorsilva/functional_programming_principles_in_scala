@@ -17,3 +17,16 @@ This can be used in experssions & patterns
 The main difference betweeen List and Stream is that the tail parameter is declared with a 'call by name' parameter: '=>'
 
 Both have analogous methods and implementations - filter, map, reduce... - but again 
+
+
+
+Streams also allow us to prepare an infinite data structure: since the tail is lazily evaluated we don't need to worry about non termination.
+
+eg: a stream of all integers starting from a 'n' number:
+
+def from(n: Int): Stream[Int]  n #:: from(n+1)
+
+stream of all multiples of 4:
+
+from(0) map (_ * 4)
+
